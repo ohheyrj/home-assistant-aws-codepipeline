@@ -1,0 +1,10 @@
+{
+    "domain": "aws_codepipeline",
+    "name": "AWS CodePipeline",
+    "documentation": "https://www.example.com",
+    "dependencies": [],
+    "codeowners": [],
+    "requirements": [
+        "boto3==1.16.59"
+    ]
+}

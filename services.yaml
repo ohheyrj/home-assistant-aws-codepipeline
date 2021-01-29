@@ -1,0 +1,6 @@
+execute_pipeline:
+    description: Execute a given AWS Codepipeline
+    fields:
+      pipeline_name:
+        description: The name of the pipeline
+        example: "TestPipeline"
