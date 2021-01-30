@@ -1,0 +1,11 @@
+{
+    "domain": "aws_codepipeline",
+    "name": "AWS CodePipeline",
+    "documentation": "https://github.com/rj175/home-assistant-aws-codepipeline",
+    "dependencies": [],
+    "codeowners": ["@rj175"],
+    "issue_tracker": "https://github.com/rj175/home-assistant-aws-codepipeline/issues",
+    "requirements": [
+        "boto3==1.16.59"
+    ]
+}
