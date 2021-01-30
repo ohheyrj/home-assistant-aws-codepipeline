@@ -1,16 +1,11 @@
-"""AWS CodePipeline"""
-from .const import (
-    DOMAIN,
-    CONF_ACCESS_KEY_ID,
-    CONF_SECRET_ACCESS_KEY,
-    CONF_REGION,
-    CONF_PIPELINE_NAMES,
-    SERVICE_EXECUTE_PIPELINE,
-)
+"""AWS CodePipeline Integration."""
 import boto3
 import botocore
-import voluptuous as vol
 import homeassistant.helpers.config_validation as cv
+import voluptuous as vol
+
+from .const import (CONF_ACCESS_KEY_ID, CONF_PIPELINE_NAMES, CONF_REGION,
+                    CONF_SECRET_ACCESS_KEY, DOMAIN, SERVICE_EXECUTE_PIPELINE)
 
 CONFIG_SCHEMA = vol.Schema(
     {
@@ -31,6 +26,7 @@ CONFIG_SCHEMA = vol.Schema(
 EXECUTE_PIPELINE_SERVICE_SCHEMA = vol.Schema({vol.Required("pipeline_name"): cv.string})
 
 def setup(hass, config):
+    """Setup the client and register service with HA."""
     client = boto3.client(
         "codepipeline",
         region_name=config[DOMAIN][CONF_REGION],
@@ -38,12 +34,14 @@ def setup(hass, config):
         aws_secret_access_key=config[DOMAIN][CONF_SECRET_ACCESS_KEY],
     )
 
+    # Save client and pipeline names to config data for later use.
     hass.data[DOMAIN] = {
         "instance": client,
         "pipeline_names": config[DOMAIN][CONF_PIPELINE_NAMES],
     }
 
     def execute_pipeline(call):
+        """Execute a given pipeline by name."""
         pipeline_name = call.data["pipeline_name"]
         try:
             client.start_pipeline_execution(name=pipeline_name)
