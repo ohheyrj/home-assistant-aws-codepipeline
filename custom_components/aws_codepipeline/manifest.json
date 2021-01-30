@@ -7,5 +7,6 @@
     "issue_tracker": "https://github.com/rj175/home-assistant-aws-codepipeline/issues",
     "requirements": [
         "boto3==1.16.59"
-    ]
+    ],
+    "version": "v0.1.1"
 }
