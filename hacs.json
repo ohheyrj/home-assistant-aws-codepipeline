@@ -1,0 +1,5 @@
+{
+    "name": "AWS Codepipeline",
+    "domains": ["sensors"],
+    "iot_class": ["Cloud Poll"]
+}

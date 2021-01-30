@@ -9,7 +9,7 @@ from .const import (
     CONF_ACCESS_KEY_ID,
     CONF_SECRET_ACCESS_KEY,
     CONF_REGION,
-    CONF_PIPELINE_NAME,
+    CONF_PIPELINE_NAMES,
     ICON,
     ATTR_PIPELINE_LAST_UPDATE_TIME,
     ATTR_PIPELINE_TRIGGER,
@@ -22,10 +22,12 @@ import logging
 _LOGGER = logging.getLogger(__name__)
 
 def setup_platform(hass, config, add_entities, discovery_info=None):
-    print(hass.data[DOMAIN])
     client = hass.data[DOMAIN]["instance"]
 
-    add_entities([AwsCodepipelineSensor(client, hass.data[DOMAIN]["pipeline_name"])])
+    pipelines = hass.data[DOMAIN][CONF_PIPELINE_NAMES]
+
+    for p in pipelines:
+        add_entities([AwsCodepipelineSensor(client, p)])
 
     return True
 
@@ -62,11 +64,12 @@ class AwsCodepipelineSensor(Entity):
 
     def update(self):
         _LOGGER.info("Getting sensor update")
-        data = self._client.list_pipeline_executions(
-            pipelineName=self._pipeline_name
-        )['pipelineExecutionSummaries'][0]
-
-        _LOGGER.info(data)
+        try:
+            data = self._client.list_pipeline_executions(
+                pipelineName=self._pipeline_name
+            )['pipelineExecutionSummaries'][0]
+        except:
+            raise Warning(f"Problem finding pipeline {self._pipeline_name}")
 
         self._state = data['status']
         self._last_update = data['lastUpdateTime']
